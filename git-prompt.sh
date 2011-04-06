@@ -24,6 +24,8 @@
         vim_module=${vim_module:-on}
         error_bell=${error_bell:-off}
         cwd_cmd=${cwd_cmd:-\\w}
+        rvm=${rvm:-off}
+        rvm_token=${rvm_prompt_token:-version patchlevel gemset unicode}
 
 
         #### dir, rc, root color
@@ -641,7 +643,13 @@ prompt_command_function() {
         # else eval cwd_cmd,  cwd should have path after exection
         eval "${cwd_cmd/\\/cwd=\\\\}"
 
-        PS1="$colors_reset$rc$head_local$color_who_where$dir_color$cwd$tail_local$dir_color$prompt_char $colors_reset"
+        # Trying to add support for rvm-prompt
+        # I'll try to write a better code
+        if [[ $rvm == "on" ]] ; then
+          rvm_prompt=$(rvm-prompt $rvm_token)
+        fi
+
+        PS1="$rvm_prompt$colors_reset$rc$head_local$color_who_where$dir_color$cwd$tail_local$dir_color$prompt_char $colors_reset"
 
         unset head_local tail_local pwd
  }
